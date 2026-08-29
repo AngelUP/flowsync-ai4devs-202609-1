@@ -1,28 +1,50 @@
 # FlowSync
 
-Gestión de tareas en equipo. Monorepo con **AdonisJS 7 + SQLite** en `backend/` y **React 19 + Vite** en `frontend/`.
+Proyecto de práctica del curso: gestión de tareas en equipo. API en AdonisJS (`backend/`) +
+frontend en React + Vite (`frontend/`).
 
-Este es el proyecto sobre el que trabajas en el Módulo 3. Léelo entero antes de empezar: además de cómo levantarlo, aquí está **el ejercicio y cómo se entrega**.
+Este es el sistema sobre el que trabajas en el Módulo 4. Léelo entero antes de empezar: además
+de cómo levantarlo, aquí está **el ejercicio y cómo se entrega**.
 
 ## Arrancarlo
 
-No hay `package.json` en la raíz. Los comandos de `npm` se ejecutan dentro de `backend/` y de `frontend/`, y el `Makefile` de la raíz ya lo hace por ti.
+El repo trae un `Makefile` en la raíz con los atajos de desarrollo. Con dos comandos tienes todo
+en marcha:
 
 ```bash
-make setup   # solo la primera vez: instala deps, crea los .env, genera la APP_KEY y migra
+make setup   # solo la primera vez: instala backend y frontend, crea los .env y migra
 make start   # levanta backend (:3333) y frontend (:5173) a la vez
-make help    # lista todos los targets
 ```
 
-`make start` arranca los dos servidores juntos; `Ctrl-C` los para, y si uno se cae se lleva al otro por delante. El frontend apunta al backend por defecto; para cambiarlo, ajusta `VITE_API_URL` en `frontend/.env`.
+`make start` arranca los dos servidores juntos; `Ctrl-C` los para. `make help` lista todos los
+targets.
 
-> Requisitos: Node.js 24 o superior (lo pide el proyecto: con la 20, `make setup` se para con `Unknown file extension ".ts"`; OpenSpec, que instalas siguiendo la última lección del módulo asíncrono, se conforma con la 20.19) y GNU Make. En Windows, desde WSL y con el repo clonado dentro del sistema de ficheros de Linux.
+- Backend en `http://localhost:3333`.
+- Frontend en `http://localhost:5173`. Apunta al backend por defecto; para cambiarlo, ajusta
+  `VITE_API_URL` en `frontend/.env`.
 
-## Qué hay ya construido
+La suite se lanza desde `backend/`:
 
-- **El vertical de cuentas y acceso, de punta a punta**: registro, inicio de sesión, sesión y perfil, con su API y sus pantallas. Es la superficie del ejercicio.
-- **El PRD y el backlog del equipo**, en `docs/`. No los necesitas para el ejercicio; los usa el directo.
-- **La capa de agente** de la raíz (`CLAUDE.md`, `AGENTS.md`, `.claude/`, `.mcp.json`), que es parte del material y no un accesorio.
+```bash
+(cd backend && npm test)
+```
+
+Debe terminar **en verde**. Si algo sale en rojo aquí, es tu entorno: resuélvelo antes del
+directo.
+
+> ¿Prefieres arrancar a mano, sin `make`? Los pasos por servidor (`npm install`, `.env`,
+> migraciones, `npm run dev`) están en el asíncrono del curso.
+
+## Dónde está lo que vas a necesitar
+
+- `openspec/specs/` es la **spec viva**. Cada carpeta de ahí dentro es una **capability**: una
+  parcela de comportamiento del sistema, escrita como **debe comportarse** y no como está
+  programada. Dentro de cada una hay **requisitos**, y colgando de cada requisito, los
+  **scenarios**: los ejemplos concretos, con su par de *cuándo* y *entonces*, contra los que esa
+  regla se comprueba.
+- `backend/tests/` es la suite. Ahí viven los tests que ya existen, y ahí van los que escribas.
+- `CLAUDE.md` (y `AGENTS.md`, que apunta al mismo archivo) son las reglas que tu agente lee
+  siempre.
 
 ---
 
@@ -35,43 +57,74 @@ make help    # lista todos los targets
 Tres momentos, y conviene que los sepas antes de empezar:
 
 1. **Lo intentas tú**, aquí, sobre este proyecto. Entregas lo que te salga, con lo que tenga.
-2. **Lo ves resuelto en el directo.** El mentor hace este mismo ejercicio sobre este mismo proyecto y sobre la misma superficie. Si no te salió, ahí ves que se puede y cómo.
+2. **Lo ves resuelto en el directo.** El mentor hace este mismo trabajo sobre este mismo
+   proyecto. Si no te salió, ahí ves que se puede y cómo.
 3. **Lo replicas después**, con los prompts del mentor, que te llegan por escrito.
 
-Por eso la entrega a medias no es un problema: **el paso 1 no se puntúa por completarlo**. Y por eso conviene mirar el directo sin teclear, porque lo vas a repetir con calma luego.
+Por eso la entrega a medias no es un problema: **el paso 1 no se puntúa por completarlo**. Y por
+eso conviene mirar el directo sin teclear, porque lo vas a repetir con calma luego.
 
-> ⚠️ **En el paso 3 no esperes salidas idénticas.** El agente no es determinista: con el mismo prompt y el mismo código cambian la redacción, el orden y hasta cuántos requisitos escribe. Lo que se repite es **la forma**, no el texto.
+> ⚠️ **En el paso 3 no esperes salidas idénticas.** El agente no es determinista: con el mismo
+> prompt y el mismo código cambian los nombres de las variables, la redacción y hasta cuántas
+> filas te devuelve una tabla. Lo que se repite es **la forma**, no el texto.
 
-## Parte A: la spec, con reloj
+## Parte A: la matriz y los tests que faltan, con reloj
 
-Con un agente, escribe **la spec de lo que el sistema hace hoy** en el vertical de cuentas y acceso, y déjala en `docs/spec-viva/<tus-iniciales>.md`, no en el chat. La carpeta no existe todavía: la crea tu archivo.
+Con un agente, y sobre el requisito **«Lo que cada tarea muestra de su responsable»** de
+`openspec/specs/tasks/spec.md`, produce dos cosas y déjalas escritas en archivos versionados, no
+en el chat. Es el mismo requisito sobre el que trabaja el mentor en el directo: tú lo intentas
+antes, con tus propios prompts.
 
-**Entero, en sus dos capas**, igual que lo hace el mentor en el directo: en el backend, sus rutas, sus controladores, el modelo de usuario, sus validadores y sus middlewares; en el frontend, las pantallas de acceso, el estado de sesión y la protección de rutas. Y nada que no sea cuentas y acceso. Los prompts los escribes tú. Que el agente escriba las dos capas es rápido; lo que no cabe en el reloj es comprobarlo todo después, que es donde está el ejercicio.
+**Solo ese requisito.** No la capability entera, aunque quepa y aunque el agente se ofrezca a
+cubrirla.
 
-**Para esto no necesitas OpenSpec, y no lo inicialices aquí.** No se lanza ningún comando: se lee el código que ya está en el repo y se escribe un archivo de texto con el formato de una spec viva. El `openspec init` sobre este proyecto llega en el directo.
+### A.1 · La matriz de trazabilidad
 
-**El formato no es negociable:**
+Va en `docs/verificacion/<tus-iniciales>.md`. Es una carpeta nueva: la crea tu archivo.
 
-- Arriba, un `## Purpose` de una o dos frases: para qué existe esta capability.
-- Debajo, `## Requirements`, y colgando de él `### Requirement:` en los que el sistema **SHALL** hacer algo.
-- Bajo cada requisito, al menos un `#### Scenario:` de cuatro almohadillas, con dos viñetas: `- **WHEN**` y `- **THEN**`. No hay casilla para el `GIVEN`: la precondición va dentro del `WHEN`.
-- En castellano, salvo las mayúsculas de la RFC.
+**El formato no es negociable**: una fila por scenario, con estas cuatro casillas, y **dos
+números arriba del todo** (cuántos scenarios tiene ese requisito y cuántos resultaron estar
+cubiertos).
 
-**Y tres reglas duras:**
+1. **El scenario, en una línea.** Qué se espera y en qué situación.
+2. **Qué prueba lo cubre, nombrada tal cual aparece en la suite.** Sin el nombre concreto, la
+   casilla se queda vacía: *"seguro que algo lo cubre"* no es una fila.
+3. **Cubierto · No cubierto · No lo sé.** Los tres estados existen, y el tercero no es un fallo
+   tuyo: es el resultado más informativo de los tres.
+4. **Si pusiste "no lo sé", qué te faltó para decidirlo.** Media línea.
 
-1. **Nada de `ADDED`, `MODIFIED` ni `REMOVED`.** Eso es el vocabulario de un delta, y esto no es un delta: es la verdad actual del sistema.
-2. **Solo comportamiento observable desde fuera.** Ni un nombre de clase, ni un nombre de archivo, ni una ruta de código. En la API, observable es la petición y la respuesta. En la pantalla, observable es lo que una persona ve y puede hacer.
-3. **No toques el código.** Ni siquiera para arreglar lo que encuentres, y sobre todo para eso: lo que encuentres es material de la parte B.
+> ⚠️ **Un nombre de test no es una prueba de cobertura.** Un test puede llamarse igual que el
+> scenario y comprobar otra cosa, o comprobar la mitad. Para marcar *cubierto* hay que abrir el
+> test y leer lo que afirma.
 
-> ⚠️ **Cuando suene el reloj, para. Aunque esté a medias.** Una spec en la que comprobaste seis de los requisitos que escribiste y dejaste dos a medias **es información**: dice hasta dónde llegaste. Una spec completada de memoria diez minutos después es ruido con formato, y encima es indistinguible de la buena.
+### A.2 · Los tests que faltan
 
-## Parte B: las tres listas
+De las filas que quedaron en **No cubierto**, escribe los tests que faltan: **uno por scenario**,
+en `backend/tests/functional/tasks/`, siguiendo el estilo de los de `backend/tests/functional/auth/`. **No toques
+nada fuera de `backend/tests/`.**
 
-Debajo de la spec, en el mismo archivo. **Esta parte no se puede fallar**, y es la que hay que traer sí o sí.
+Después, ejecútalos.
 
-1. **Cuántos requisitos escribió el agente, y cuántos comprobaste tú abriendo el código.** Los dos números, tal cual salieron. Comprobar significa haber ido a mirar; leer el requisito y que suene razonable no cuenta.
-2. **Las incoherencias que aparecieron al escribirla**, una línea cada una y con dónde se ve.
-3. **Lo que no supiste decidir si era un bug o el contrato**, y en una frase, qué dos lecturas se contradecían. Esta es la que importa.
+> ⚠️ **Pase lo que pase, no arregles el código, y no aflojes el test para que pase.** Si algo se
+> pone rojo, se queda rojo y se entrega rojo: hoy toca saber qué está mal, no taparlo. Quien
+> verifica no arregla, porque quien arregla deja de ver.
+
+> ⚠️ **Cuando suene el reloj, para. Aunque esté a medias.** Una matriz con cuatro filas rellenas
+> y el resto en blanco **es información**: dice hasta dónde llegaste. Una fila completada de
+> memoria diez minutos después es ruido con formato, y encima es indistinguible de la buena.
+
+## Parte B: las tres líneas
+
+Debajo de la matriz, en el mismo archivo. **Esta parte no se puede fallar**, y es la que hay que
+traer sí o sí.
+
+1. **Cuántos scenarios creías cubiertos antes de mirar, y cuántos lo estaban.** El primer número
+   se escribe **antes** de lanzar el primer prompt, a ojo y sin abrir nada. Los dos tal cual
+   salieron.
+2. **El scenario del que no supiste si era un hueco de test o un hueco de spec**, y en una frase,
+   por qué.
+3. **Algo que el scenario no decidía por ti y tuviste que decidir al escribir el test.** Un valor
+   concreto, un límite, qué pasa cuando el dato viene vacío.
 
 ---
 
@@ -81,52 +134,59 @@ Debajo de la spec, en el mismo archivo. **Esta parte no se puede fallar**, y es 
 
 ### 1. Forkea este repositorio
 
-Con el botón **Fork** de arriba. Sobre un clon directo no tienes permiso de escritura, y aquí vas a crear una rama y commitear.
+Con el botón **Fork** de arriba. Sobre un clon directo no tienes permiso de escritura, y aquí vas
+a crear una rama y commitear.
 
 ```bash
 git clone git@github.com:<tu-usuario>/flowsync-ai4devs.git
 cd flowsync-ai4devs
 git remote add upstream git@github.com:LIDR-academy/flowsync-ai4devs.git
 git fetch upstream
-git checkout -b s3/start upstream/s3/start
+git checkout -b s4/start upstream/s4/start
 ```
 
-> 📌 Si te sale `Permission denied (publickey)`, es SSH y no el fork. La guía oficial está en `docs.github.com/es/authentication/connecting-to-github-with-ssh`.
+> 📌 Si te sale `Permission denied (publickey)`, es SSH y no el fork. La guía oficial está en
+> `docs.github.com/es/authentication/connecting-to-github-with-ssh`.
 
 ### 2. Crea tu rama
 
 ```bash
-git checkout -b spec-viva-<tus-iniciales>
+git checkout -b trazabilidad-<tus-iniciales>
 ```
 
 ### 3. Haz el ejercicio
 
-Tu archivo va en `docs/spec-viva/`, con los requisitos de la Parte A y las tres listas de la Parte B.
+La matriz y las tres líneas van en `docs/verificacion/<tus-iniciales>.md`. Los tests, en
+`backend/tests/functional/tasks/`.
 
 ### 4. Rellena `prompts.md`
 
-Está en la raíz, con la plantilla puesta. **Es obligatorio y es la mitad de lo que se revisa**: lo que se mira no es solo tu resultado, es cómo lo pediste. Un prompt por bloque, con el modelo y la herramienta que usaste, incluidos los que no funcionaron.
+Está en la raíz, con la plantilla puesta. **Es obligatorio y es la mitad de lo que se revisa**: lo
+que se mira no es solo tu resultado, es cómo lo pediste. Un prompt por bloque, con el modelo y la
+herramienta que usaste.
 
 ### 5. Abre el pull request
 
-Contra este repositorio, no contra tu fork. Con tu rama empujada, GitHub te ofrece el botón arriba.
+Contra este repositorio. Con tu rama empujada, GitHub te ofrece el botón arriba.
 
 ```bash
-git add docs/spec-viva prompts.md
-git commit -m "spec viva: cuentas y acceso + prompts"
-git push -u origin spec-viva-<tus-iniciales>
+git add docs/verificacion backend/tests prompts.md
+git commit -m "trazabilidad: responsable de la tarea + prompts"
+git push -u origin trazabilidad-<tus-iniciales>
 ```
 
 ## El plazo
 
-**Antes del directo.** Lo que llegue a tiempo recibe feedback de tu TA antes de la sesión, que es el momento en que te sirve. Lo que llegue después **se marca como recibido pero no se revisa**: el feedback existe para que llegues al directo sabiendo dónde fallaste, y después de la sesión ya no puede hacer eso.
+**Antes del directo.** Lo que llegue a tiempo recibe feedback de tu TA antes de la sesión, que es
+el momento en que te sirve. Lo que llegue después **se marca como recibido pero no se revisa**: el
+feedback existe para que llegues al directo sabiendo dónde fallaste, y después de la sesión ya no
+puede hacer eso.
 
 ## Antes de conectarte, comprueba
 
 - [ ] Estás en tu **fork**, en tu rama, y `git push` funciona.
-- [ ] El proyecto levanta entero y puedes iniciar sesión en la interfaz.
-- [ ] Existe tu archivo en `docs/spec-viva/`, con la spec y las tres listas.
+- [ ] El proyecto levanta y la suite corre.
+- [ ] Existe tu archivo en `docs/verificacion/`, con la matriz y las tres líneas.
+- [ ] Los tests que escribiste están commiteados tal como quedaron.
 - [ ] `prompts.md` está relleno, con modelo y herramienta en cada bloque.
 - [ ] El pull request está abierto.
-
-> Las instrucciones completas para dejar el entorno listo (instalar OpenSpec y montar el sandbox) están en la última lección del módulo asíncrono, «Ejercicio FlowSync».
