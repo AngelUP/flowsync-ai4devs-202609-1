@@ -22,14 +22,26 @@ Borra el ejemplo de abajo cuando escribas el primero.
 
 ## Prompt 1
 
-**Modelo:** Opus 1M xHigh
+**Modelo:** Sonnet 5.5
 **Herramienta:** Claude Code
 
 ```
-Este es el ejemplo. Bórralo.
+Considerando que ya existe la capability **cuentas y acceso** que conlleva el registro, inicio de sesion, sesión y perfil. Genera un archivo con el nombre **aup.md** en la ruta **docs/spec-viva/** con los siguientes puntos:
 
-El prompt va aquí dentro, entero y con sus saltos de línea,
-para que se sepa dónde empieza y dónde acaba.
+-Agregar un ## Purpose de una o dos frases que expliquen porque existe la capability.
+-Agregar un ## Requeriments.
+-Colgando de ## Requeriments crear los ## Requeriment necesarios con lo que el sistema debe hacer. La nomenclatura para escribir esta sección es empezar con "El sistema SHALL ...".
+-Bajo cada requisito, agregar al menos un ## Scenario de cuatro almohadillas, con dos viñetas **WHEN** y **THEN**. Para esto se utiliza BDD pero considera que no hay espacio para el GIVEN, este se agrega dentro del WHEN.
+
+Consideraciones para redactar el archivo:
+
+-Todo en español.
+-Usar RFC-2119.
+-No agregar ADD, MODIFIED ni REMOVED.
+-No incluyas nombre de clases, archivos o rutas de código.
+-No modificar código.
+
+
 ```
 
-**Qué salió:** (opcional, una línea) funcionó a la primera / tuve que insistir / me inventó una ruta que no existe.
+**Qué salió:** Función a la primera, me genero el archivo. Solo que me genero automaticamente el commit e intento el PR al repo de LIDR (el tema de permisos lo detuvo).

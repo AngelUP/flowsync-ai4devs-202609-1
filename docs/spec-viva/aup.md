@@ -135,3 +135,14 @@ El sistema SHALL presentar los errores de registro, inicio de sesión y autentic
 
 - **WHEN** una persona envía un formulario de registro o de inicio de sesión con datos que no superan la validación
 - **THEN** el sistema SHALL mostrar mensajes en español junto a cada campo afectado y SHALL conservar los datos que la persona ya había escrito
+
+
+
+## Parte B
+
+1. Escribió 10 y yo revise 5.
+2. 
+- Pude ver que me genero un requerimiento **Mensajes de error comprensibles** pero veo que este bien ya pudiera estar inmerso en el requerimiento **Validación de datos de registro**.
+Nota: Tal vez no capte correctamente la pregunta, pero esto fue lo único que me genero ruido.
+
+3. Pues aqui pondría siempre al requerimiento de los mensajes debido a que no me quedo claro si es parte del contrato o una exageración del agente.
